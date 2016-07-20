@@ -17,9 +17,6 @@
     "url": "git://github.com/BausCode/react-inview.git"
   },
   "homepage": "https://github.com/BausCode/react-inview",
-  "files": [
-    "src"
-  ],
   "keywords": [
     "react",
     "inview"
