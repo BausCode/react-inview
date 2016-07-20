@@ -72,7 +72,9 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
 
         if (typeof(window) !== 'undefined') {
           window.addEventListener('scroll', this.handleScroll.bind(this));
+          this.handleScroll();
         }
+
       }
 
       componentWillUnmount() {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDom from 'react-dom'
-import ReactInview from './src';
+import ReactInview from './src/inview.jsx';
 
 class MyComponent extends Component {
 

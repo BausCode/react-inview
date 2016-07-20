@@ -1,1 +1,1 @@
-module.exports = require('./inview.jsx');       
+module.exports = require('./inview.js');       
