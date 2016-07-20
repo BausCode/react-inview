@@ -7,8 +7,8 @@ function getViewPortBox(offsetY, boundingBox) {
     vWidth = window.innerWidth || document.documentElement.clientWidth,
     vHeight  = window.innerHeight || document.documentElement.clientHeight;
 
-  if (offsetY > 0 && offsetY <= 1) {
-    const newHeight = vHeight * (1-offsetY);
+  if (offsetY >= 0 && offsetY <= 1) {
+    const newHeight = vHeight * (1- offsetY);
     const newTop = (vHeight - newHeight) /2;
     vTop = newTop; 
     vHeight = newHeight; 
@@ -29,27 +29,27 @@ function getBoundingBox(el) {
 }
 
 // Checks to see if element is visisble
-function isElementVisible(el, rect, viewPort) {
-  const efp = function (x, y) { return document.elementFromPoint(x, y); };     
 
-  // Return false if it's not in the viewport
-  if (rect.right < rect.left || rect.bottom < rect.height 
-          || rect.left > viewPort.width || rect.top > viewPort.top)
-    return false;
-
-  // Return true if any of its four corners are visibl
-  return (
-        el.contains(efp(rect.left,  rect.top))
-    ||  el.contains(efp(rect.right, rect.top))
-    ||  el.contains(efp(rect.right, rect.bottom))
-    ||  el.contains(efp(rect.left,  rect.bottom))
-  );
+function isElementFullyVisible (el, rect, viewport) {
+    return (
+        rect.top >= viewport.top &&
+        rect.left >= 0 &&
+        rect.bottom <= viewport.top + viewport.height && 
+        rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+    );
 }
 
 
+function isElementTopVisible (el, rect, viewport) {
+    return (
+        rect.top >= viewport.top
+    );
+}
+
 let ReactInviewWrapper = function ReactInviewWrapper ({
   offsetY = 0,
-  showGuides = false
+  showGuides = false,
+  fullElementInView = true
 }={}) {
   return (ComposedComponent) => {
 
@@ -59,7 +59,7 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
         super();
         
         this.state = {
-          elementIsInView: 0,
+          elementIsInView: false,
           boundingBox: {},
           viewPortBox: {}
         };
@@ -70,25 +70,28 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
           throw new Error('Cannot find container');
         }
 
-        if (process.env.BROWSER) {
+        if (typeof(window) !== 'undefined') {
           window.addEventListener('scroll', this.handleScroll.bind(this));
         }
-
       }
 
       componentWillUnmount() {
-        if (process.env.BROWSER) {
+        if (typeof(window) !== 'undefined') {
           window.removeEventListener('scroll', this.handleScroll.bind(this));
-        }
+        } 
       }
 
       handleScroll() {
         const element = this.refs.container.children[0];
         const boundingBox = getBoundingBox(element);
         const viewPortBox = getViewPortBox(offsetY, boundingBox);
+        let elementIsInView = false;
 
-        const elementIsInView = isElementVisible(element, boundingBox, viewPortBox);
-
+        if(fullElementInView) {
+          elementIsInView = isElementFullyVisible(element, boundingBox, viewPortBox);
+        } else {
+          elementIsInView = isElementTopVisible(element, boundingBox, viewPortBox);
+        }
         
         this.setState({elementIsInView: elementIsInView});
         this.setState({boundingBox: boundingBox});
@@ -96,25 +99,31 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
       }
   
       _showGuides() {
-        if (showGuides) {
+        if (showGuides && typeof this.state.viewPortBox.top !== 'undefined') {
           const {top, left, height, width} = this.state.viewPortBox;
           let styles = {
-            'background-color': '#ccc', 
+            'backgroundColor': '#ccc', 
             'position': 'fixed',
             'opacity': '.5',
-            'top': top -height,
+            'top': top,
             'left': left,
             'height': height,
             'width': width
           };
 
-          return <div style={styles} >–––</div>;
+          return <div style={styles}></div>;
         } 
       } 
 
       render() {
+        let styles = {};
+        if (showGuides) {
+          styles = {
+            backgroundColor: 'green'
+          }
+        }
         return  (
-          <div ref="container">
+          <div style={styles} ref="container">
             <ComposedComponent update={this.handleScroll.bind(this)} {...this.state}  {...this.props} />
             { this._showGuides() }
           </div>
