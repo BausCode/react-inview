@@ -7,7 +7,7 @@
     "parser": "babel-eslint"
   },
   "scripts": {
-    "start": "./node_modules/.bin/budo example.jsx --live --open -- -t babelify"
+    "start": "budo example.jsx --live --open -- -t babelify"
   },
   "repository": {
     "type": "git",
@@ -38,5 +38,9 @@
   "peerDependencies": {
     "react": "^15.0.2",
     "react-dom": "^15.0.0"
+  },
+  "dependencies": {
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1"
   }
 }

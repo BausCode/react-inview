@@ -10,7 +10,7 @@ Currently in beta, please help contribute!
 Requires [nodejs](http://nodejs.org/).
 
 ```sh
-// Coming soon
+npm install react-inview-js
 ```
 ## Options
 
