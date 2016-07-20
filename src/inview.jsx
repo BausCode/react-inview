@@ -108,7 +108,8 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
             'top': top,
             'left': left,
             'height': height,
-            'width': width
+            'width': width,
+            'zIndex': 99999999999
           };
 
           return <div style={styles}></div>;

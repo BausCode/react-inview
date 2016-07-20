@@ -37,10 +37,6 @@
     "standard": "^6.0.8"
   },
   "peerDependencies": {
-    "react": "^15.0.2",
-    "react-dom": "^15.0.0"
-  },
-  "dependencies": {
     "react": "^0.14.0 || ^15.0.0",
     "react-dom": "^0.14.0 || ^15.0.0"
   }
