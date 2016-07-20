@@ -14,9 +14,9 @@ npm install react-inview-js
 ```
 ## Options
 
-*showGuides: creates visual indicator of viewport size
-*offsetY: range 0 to 1. changes how large the viewport should be. Defaults to 0 which is the full size of browser. 
-*fullElementInView: boolean(true/false) - false means just the top of the element is in view - good for large elements
+* showGuides: creates visual indicator of viewport size
+* offsetY: range 0 to 1. changes how large the viewport should be. Defaults to 0 which is the full size of browser. 
+* fullElementInView: boolean(true/false) - false means just the top of the element is in view - good for large elements
 
 
 ## How To Use
