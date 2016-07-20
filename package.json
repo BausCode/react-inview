@@ -3,12 +3,13 @@
   "name": "react-inview-js",
   "version": "1.0.6",
   "description": "React Inview checker with only javascript",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "standard": {
     "parser": "babel-eslint"
   },
   "scripts": {
-    "start": "budo example.jsx --live --open -- -t babelify"
+    "start": "budo example.jsx --live --open -- -t babelify",
+    "build": "babel ./src/ -d ./dist/"
   },
   "repository": {
     "type": "git",
