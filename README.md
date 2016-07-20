@@ -1,6 +1,6 @@
 # React Inview
 
-Checks if component is inview of the viewport.
+Checks if component is inview. Built with vanilla javascript.
 
 Currently in beta, please help contribute!
 
@@ -45,4 +45,9 @@ const InviewOptions = {offsetY: 0.8, showGuides: true}
 
 export default ReactInview(InviewOptions)(MyComponent);
 
+```
+## Example
+
+```
+npm install && npm install react react-dom && npm start
 ```

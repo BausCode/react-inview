@@ -1,7 +1,7 @@
 {
-  "name": "react-inview",
+  "name": "react-inview-js",
   "version": "1.0.0",
-  "description": "React Inview Checker",
+  "description": "React Inview checker with only javascript",
   "main": "index.js",
   "standard": {
     "parser": "babel-eslint"
