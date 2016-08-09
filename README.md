@@ -3,6 +3,7 @@
 Checks if component is inview. Built with vanilla javascript.
 
 Currently in beta, please help contribute!
+![Screenshot](./react-inview.gif)
 
 
 ## Installation
