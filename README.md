@@ -24,7 +24,7 @@ npm install react-inview-js
 
 ```javascript
 import React, { Component } from 'react';
-import ReactInview from 'react-inview';
+import ReactInview from 'react-inview-js';
 
 class MyComponent extends Component {
 
