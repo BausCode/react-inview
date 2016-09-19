@@ -42,7 +42,7 @@ class MyComponent extends Component {
   }
 }
 
-const InviewOptions = {offsetY: 0.8, showGuides: true}
+const InviewOptions = {offsetY: 0.8, showGuides: true, fullElementInView: false}
 
 export default ReactInview(InviewOptions)(MyComponent);
 
