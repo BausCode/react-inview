@@ -2,8 +2,10 @@ import React, { Component } from 'react'
 import ReactDom from 'react-dom'
 import ReactInview from './src/inview.jsx';
 
+//Generic Test component
+//
+//
 class MyComponent extends Component {
-
  render () {
     const inView = this.props.elementIsInView;
 
@@ -23,28 +25,37 @@ class MyComponent extends Component {
   }
 }
 
+
+// How you wrap you component in ReactInview
 const InviewOptions = {offsetY: 0.6, showGuides: true};
 const InviewComponent = ReactInview(InviewOptions)(MyComponent);
 
-
+//Generic Large Test component
+//
+//
 class LargeComponent extends Component {
 
  render () {
     const inView = this.props.elementIsInView;
 
     // Change classname based on boolean
-    const viewClassName = (inView)? 'is--inview-true' : 'is--inview-false';
+    const viewClassName = (inView)? 'Currently In View!' : 'This element is not in the viewport';
+    const HasBeenInView = (this.props.elementHasBeenInView)? 'User Has seen this!' : 'Has not been in view yet';
 
     return (
       <div className={viewClassName}>
         <span>{viewClassName}</span>
-        <div style={{width: '100%', height: "700px"}} > This is a giant box!! {viewClassName}</div>
+        <div style={{width: '100%', height: "700px"}} > 
+        <h1>{HasBeenInView}</h1>
+        <h1>This is a giant box!! {viewClassName}</h1>
+        </div>
       </div>
     );
   }
 }
 
 
+// How you wrap another you component in ReactInview
 const LargeInviewOptions = {offsetY: 0.6, showGuides: true, fullElementInView: false};
 const LargeInviewComponent = ReactInview(LargeInviewOptions)(LargeComponent);
 

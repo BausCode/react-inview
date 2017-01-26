@@ -19,6 +19,9 @@ npm install react-inview-js
 * offsetY: range 0 to 1. changes how large the viewport should be. Defaults to 0 which is the full size of browser. 
 * fullElementInView: boolean(true/false) - false means just the top of the element is in view - good for large elements
 
+## Received Props
+*this.props.elementIsInView: True/false value based on if element is in view
+*this.props.elementHasBeenInView: True/false if the element has been in view
 
 ## How To Use
 
