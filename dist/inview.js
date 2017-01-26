@@ -82,6 +82,7 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
 
         _this.state = {
           elementIsInView: false,
+          elementIsHasBeenInView: false,
           boundingBox: {},
           viewPortBox: {}
         };
@@ -120,6 +121,9 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
           } else {
             elementIsInView = isElementTopVisible(element, boundingBox, viewPortBox);
           }
+          if (elementIsInView) {
+            this.setState({ elementHasBeenInView: elementIsInView });
+          }
 
           this.setState({ elementIsInView: elementIsInView });
           this.setState({ boundingBox: boundingBox });
@@ -155,7 +159,7 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
           var styles = {};
           if (showGuides) {
             styles = {
-              backgroundColor: 'green'
+              backgroundColor: 'gray'
             };
           }
           return _react2.default.createElement(
