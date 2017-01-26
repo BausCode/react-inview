@@ -61,14 +61,13 @@ function isElementTopVisible(el, rect, viewport) {
 }
 
 var ReactInviewWrapper = function ReactInviewWrapper() {
-  var _ref = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-  var _ref$offsetY = _ref.offsetY;
-  var offsetY = _ref$offsetY === undefined ? 0 : _ref$offsetY;
-  var _ref$showGuides = _ref.showGuides;
-  var showGuides = _ref$showGuides === undefined ? false : _ref$showGuides;
-  var _ref$fullElementInVie = _ref.fullElementInView;
-  var fullElementInView = _ref$fullElementInVie === undefined ? true : _ref$fullElementInVie;
+  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+      _ref$offsetY = _ref.offsetY,
+      offsetY = _ref$offsetY === undefined ? 0 : _ref$offsetY,
+      _ref$showGuides = _ref.showGuides,
+      showGuides = _ref$showGuides === undefined ? false : _ref$showGuides,
+      _ref$fullElementInVie = _ref.fullElementInView,
+      fullElementInView = _ref$fullElementInVie === undefined ? true : _ref$fullElementInVie;
 
   return function (ComposedComponent) {
 
@@ -78,7 +77,7 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
       function ReactInview() {
         _classCallCheck(this, ReactInview);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ReactInview).call(this));
+        var _this = _possibleConstructorReturn(this, (ReactInview.__proto__ || Object.getPrototypeOf(ReactInview)).call(this));
 
         _this.state = {
           elementIsInView: false,
@@ -133,11 +132,11 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
         key: '_showGuides',
         value: function _showGuides() {
           if (showGuides && typeof this.state.viewPortBox.top !== 'undefined') {
-            var _state$viewPortBox = this.state.viewPortBox;
-            var top = _state$viewPortBox.top;
-            var left = _state$viewPortBox.left;
-            var height = _state$viewPortBox.height;
-            var width = _state$viewPortBox.width;
+            var _state$viewPortBox = this.state.viewPortBox,
+                top = _state$viewPortBox.top,
+                left = _state$viewPortBox.left,
+                height = _state$viewPortBox.height,
+                width = _state$viewPortBox.width;
 
             var styles = {
               'backgroundColor': '#ccc',

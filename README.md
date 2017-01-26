@@ -24,7 +24,6 @@ npm install react-inview-js
 *this.props.elementHasBeenInView: True/false if the element has been in view
 
 ## How To Use
-
 ```javascript
 import React, { Component } from 'react';
 import ReactInview from 'react-inview-js';
@@ -33,13 +32,15 @@ class MyComponent extends Component {
 
  render () {
     const inView = this.props.elementIsInView;
+    const elementHasBeenInView = this.props.elementHasBeenInView;
 
     // Change classname based on boolean
     const viewClassName = (inView)? 'is--inview-true' : 'is--inview-false';
+    const elementHasBeenInView = (elementHasBeenInView)? 'Element has been seen' : 'Element has not been in view';
 
     return (
       <article className={viewClassName}>
-        <h1>React InView</h1>
+        <h1>React InView -- { elementHasBeenInView }</h1>
       </article>
     );
   }
