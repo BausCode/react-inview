@@ -55,7 +55,9 @@ function isElementFullyVisible(el, rect, viewport) {
 }
 
 function isElementTopVisible(el, rect, viewport) {
-  return rect.top >= viewport.top;
+  var topIsInView = !(rect.top >= viewport.top + viewport.height);
+  var topIsAboveView = !(rect.top + rect.height - viewport.height <= viewport.top);
+  return topIsInView && topIsAboveView;
 }
 
 var ReactInviewWrapper = function ReactInviewWrapper() {
