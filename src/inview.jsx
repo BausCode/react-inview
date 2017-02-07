@@ -29,7 +29,6 @@ function getBoundingBox(el) {
 }
 
 // Checks to see if element is visisble
-
 function isElementFullyVisible (el, rect, viewport) {
     return (
         rect.top >= viewport.top &&
@@ -38,7 +37,6 @@ function isElementFullyVisible (el, rect, viewport) {
         rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
 }
-
 
 function isElementTopVisible (el, rect, viewport) {
   const topIsInView = !(rect.top >= (viewport.top + viewport.height));
@@ -87,6 +85,8 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
       }
 
       handleScroll() {
+        if (typeof this.refs.container === 'undefined')  { return; } 
+
         const element = this.refs.container.children[0];
         const boundingBox = getBoundingBox(element);
         const viewPortBox = getViewPortBox(offsetY, boundingBox);
