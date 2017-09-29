@@ -12,6 +12,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _debounce = require('lodash/debounce');
+
+var _debounce2 = _interopRequireDefault(_debounce);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -66,7 +70,9 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
       _ref$showGuides = _ref.showGuides,
       showGuides = _ref$showGuides === undefined ? false : _ref$showGuides,
       _ref$fullElementInVie = _ref.fullElementInView,
-      fullElementInView = _ref$fullElementInVie === undefined ? true : _ref$fullElementInVie;
+      fullElementInView = _ref$fullElementInVie === undefined ? true : _ref$fullElementInVie,
+      _ref$debounceTime = _ref.debounceTime,
+      debounceTime = _ref$debounceTime === undefined ? 100 : _ref$debounceTime;
 
   return function (ComposedComponent) {
 
@@ -84,6 +90,9 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
           boundingBox: {},
           viewPortBox: {}
         };
+
+        _this.scrollListener = _this.scrollListener.bind(_this);
+        _this.handleScroll = (0, _debounce2.default)(_this.handleScroll.bind(_this), debounceTime);
         return _this;
       }
 
@@ -95,7 +104,7 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
           }
 
           if (typeof window !== 'undefined') {
-            window.addEventListener('scroll', this.handleScroll.bind(this));
+            window.addEventListener('scroll', this.scrollListener);
             this.handleScroll();
           }
         }
@@ -103,8 +112,17 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
         key: 'componentWillUnmount',
         value: function componentWillUnmount() {
           if (typeof window !== 'undefined') {
-            window.removeEventListener('scroll', this.handleScroll.bind(this));
+            window.removeEventListener('scroll', this.scrollListener);
           }
+        }
+      }, {
+        key: 'scrollListener',
+        value: function scrollListener() {
+          var _this2 = this;
+
+          window.requestAnimationFrame(function () {
+            _this2.handleScroll();
+          });
         }
       }, {
         key: 'handleScroll',
@@ -123,13 +141,15 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
           } else {
             elementIsInView = isElementTopVisible(element, boundingBox, viewPortBox);
           }
+          var newState = {
+            elementIsInView: elementIsInView,
+            boundingBox: boundingBox,
+            viewPortBox: viewPortBox
+          };
           if (elementIsInView) {
-            this.setState({ elementHasBeenInView: elementIsInView });
+            newState.elementHasBeenInView = elementIsInView;
           }
-
-          this.setState({ elementIsInView: elementIsInView });
-          this.setState({ boundingBox: boundingBox });
-          this.setState({ viewPortBox: viewPortBox });
+          this.setState(newState);
         }
       }, {
         key: '_showGuides',
@@ -167,7 +187,7 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
           return _react2.default.createElement(
             'div',
             { style: styles, ref: 'container' },
-            _react2.default.createElement(ComposedComponent, _extends({ update: this.handleScroll.bind(this) }, this.state, this.props)),
+            _react2.default.createElement(ComposedComponent, _extends({ update: this.handleScroll }, this.state, this.props)),
             this._showGuides()
           );
         }
