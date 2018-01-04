@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import debounce from "lodash/debounce";
 
 // Returns dimensions of container
 function getViewPortBox(offsetY, boundingBox) {
@@ -10,8 +11,8 @@ function getViewPortBox(offsetY, boundingBox) {
   if (offsetY >= 0 && offsetY <= 1) {
     const newHeight = vHeight * (1- offsetY);
     const newTop = (vHeight - newHeight) /2;
-    vTop = newTop; 
-    vHeight = newHeight; 
+    vTop = newTop;
+    vHeight = newHeight;
   }
 
   return {
@@ -33,14 +34,14 @@ function isElementFullyVisible (el, rect, viewport) {
     return (
         rect.top >= viewport.top &&
         rect.left >= 0 &&
-        rect.bottom <= viewport.top + viewport.height && 
+        rect.bottom <= viewport.top + viewport.height &&
         rect.right <= (window.innerWidth || document.documentElement.clientWidth)
     );
 }
 
 function isElementTopVisible (el, rect, viewport) {
   const topIsInView = !(rect.top >= (viewport.top + viewport.height));
-  const topIsAboveView = !((rect.top + rect.height - viewport.height) <= viewport.top); 
+  const topIsAboveView = !((rect.top + rect.height - viewport.height) <= viewport.top);
   return (
     topIsInView && topIsAboveView
   );
@@ -49,7 +50,8 @@ function isElementTopVisible (el, rect, viewport) {
 let ReactInviewWrapper = function ReactInviewWrapper ({
   offsetY = 0,
   showGuides = false,
-  fullElementInView = true
+  fullElementInView = true,
+  debounceTime = 100
 }={}) {
   return (ComposedComponent) => {
 
@@ -57,13 +59,16 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
 
       constructor() {
         super();
-        
+
         this.state = {
           elementIsInView: false,
           elementIsHasBeenInView: false,
           boundingBox: {},
           viewPortBox: {}
         };
+
+        this.scrollListener = this.scrollListener.bind(this);
+        this.handleScroll = debounce(this.handleScroll.bind(this), debounceTime);
       }
 
       componentDidMount() {
@@ -72,7 +77,7 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
         }
 
         if (typeof(window) !== 'undefined') {
-          window.addEventListener('scroll', this.handleScroll.bind(this));
+          window.addEventListener('scroll', this.scrollListener);
           this.handleScroll();
         }
 
@@ -80,12 +85,18 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
 
       componentWillUnmount() {
         if (typeof(window) !== 'undefined') {
-          window.removeEventListener('scroll', this.handleScroll.bind(this));
-        } 
+          window.removeEventListener('scroll', this.scrollListener);
+        }
+      }
+
+      scrollListener() {
+        window.requestAnimationFrame(() => {
+          this.handleScroll();
+        });
       }
 
       handleScroll() {
-        if (typeof this.refs.container === 'undefined')  { return; } 
+        if (typeof this.refs.container === 'undefined')  { return; }
 
         const element = this.refs.container.children[0];
         const boundingBox = getBoundingBox(element);
@@ -97,20 +108,22 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
         } else {
           elementIsInView = isElementTopVisible(element, boundingBox, viewPortBox);
         }
+        const newState = {
+          elementIsInView: elementIsInView,
+          boundingBox: boundingBox,
+          viewPortBox: viewPortBox
+        };
         if (elementIsInView) {
-          this.setState({elementHasBeenInView: elementIsInView});
+          newState.elementHasBeenInView = elementIsInView;
         }
-        
-        this.setState({elementIsInView: elementIsInView});
-        this.setState({boundingBox: boundingBox});
-        this.setState({viewPortBox: viewPortBox});
+        this.setState(newState);
       }
-  
+
       _showGuides() {
         if (showGuides && typeof this.state.viewPortBox.top !== 'undefined') {
           const {top, left, height, width} = this.state.viewPortBox;
           let styles = {
-            'backgroundColor': '#ccc', 
+            'backgroundColor': '#ccc',
             'position': 'fixed',
             'opacity': '.5',
             'top': top,
@@ -121,8 +134,8 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
           };
 
           return <div style={styles}></div>;
-        } 
-      } 
+        }
+      }
 
       render() {
         let styles = {};
@@ -133,7 +146,7 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
         }
         return  (
           <div style={styles} ref="container">
-            <ComposedComponent update={this.handleScroll.bind(this)} {...this.state}  {...this.props} />
+            <ComposedComponent update={this.handleScroll} {...this.state}  {...this.props} />
             { this._showGuides() }
           </div>
         );
