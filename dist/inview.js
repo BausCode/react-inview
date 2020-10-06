@@ -93,13 +93,14 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
 
         _this.scrollListener = _this.scrollListener.bind(_this);
         _this.handleScroll = (0, _debounce2.default)(_this.handleScroll.bind(_this), debounceTime);
+        _this.containerRef = _react2.default.createRef();
         return _this;
       }
 
       _createClass(ReactInview, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-          if (!this.refs.container) {
+          if (!this.containerRef) {
             throw new Error('Cannot find container');
           }
 
@@ -127,11 +128,11 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
       }, {
         key: 'handleScroll',
         value: function handleScroll() {
-          if (typeof this.refs.container === 'undefined') {
+          if (typeof this.containerRef === 'undefined') {
             return;
           }
 
-          var element = this.refs.container.children[0];
+          var element = this.containerRef.children[0];
           var boundingBox = getBoundingBox(element);
           var viewPortBox = getViewPortBox(offsetY, boundingBox);
           var elementIsInView = false;
@@ -186,7 +187,7 @@ var ReactInviewWrapper = function ReactInviewWrapper() {
           }
           return _react2.default.createElement(
             'div',
-            { style: styles, ref: 'container' },
+            { style: styles, ref: this.containerRef },
             _react2.default.createElement(ComposedComponent, _extends({ update: this.handleScroll }, this.state, this.props)),
             this._showGuides()
           );
