@@ -97,9 +97,9 @@ let ReactInviewWrapper = function ReactInviewWrapper ({
       }
 
       handleScroll () {
-        if (typeof this.containerRef === 'undefined') { return }
+        if (typeof this.containerRef.current === 'undefined') { return }
 
-        const element = this.containerRef.children[0]
+        const element = this.containerRef.current.children[0]
         const boundingBox = getBoundingBox(element)
         const viewPortBox = getViewPortBox(offsetY, boundingBox)
         let elementIsInView = false
